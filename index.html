@@ -1,1 +1,236 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Secret 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#000;
+    overflow:hidden;
+}
+
+/* CENTER */
+.center{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CARD */
+.card{
+    background:#111;
+    color:#fff;
+    width:90%;
+    max-width:420px;
+    padding:36px;
+    border-radius:30px;
+    text-align:center;
+    transform-style:preserve-3d;
+    transition:transform .8s ease, opacity .6s ease;
+}
+.card.crush{
+    transform:scale(.75) rotateY(90deg);
+    opacity:0;
+}
+
+/* SHADOW COLORS */
+.shadow1{box-shadow:0 0 45px rgba(255,92,141,.85)}
+.shadow2{box-shadow:0 0 45px rgba(255,170,0,.85)}
+.shadow3{box-shadow:0 0 45px rgba(140,92,255,.85)}
+.shadow4{box-shadow:0 0 45px rgba(0,200,150,.85)}
+.shadow5{box-shadow:0 0 45px rgba(0,120,255,.85)}
+
+h2{
+    font-family:'Pacifico',cursive;
+    color:#ff7eb3;
+}
+
+/* INPUT / BUTTON */
+input{
+    width:100%;
+    padding:12px 18px;
+    border-radius:25px;
+    border:none;
+    font-size:16px;
+    margin-top:15px;
+}
+button{
+    margin-top:20px;
+    padding:12px 28px;
+    border:none;
+    border-radius:30px;
+    background:#ff5c8d;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* QUESTION IMAGE */
+.q-img{
+    width:100%;
+    border-radius:20px;
+    margin:18px 0;
+}
+
+/* OPTIONS */
+.options button{
+    width:100%;
+    margin-top:10px;
+}
+
+/* LAST ENTER ANIMATION */
+.enterAnim{
+    animation:enterPulse 1.2s ease infinite;
+}
+@keyframes enterPulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.06)}
+}
+
+/* HIDE */
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 LOCK -->
+<div class="center" id="lockWrap">
+    <div class="card shadow1" id="lockCard">
+        <h2 id="quote"></h2>
+        <input type="password" id="password" placeholder="Secret password 💕">
+        <button onclick="unlock()">Unlock 🎁</button>
+    </div>
+</div>
+
+<!-- ❓ QUESTIONS -->
+<div class="center hidden" id="questionWrap">
+    <div class="card shadow2" id="qCard">
+        <h2 id="qText"></h2>
+        <img id="qImg" class="q-img">
+        <div class="options" id="options"></div>
+    </div>
+</div>
+
+<!-- 💖 FINAL -->
+<div class="center hidden" id="finalWrap">
+    <div class="card shadow5" id="finalCard">
+        <h2>Bas ek last step 💕</h2>
+        <p>Birthday wish bilkul ready hai ✨</p>
+        <button class="enterAnim" onclick="goHome()">💖 A Special Wish for You</button>
+    </div>
+</div>
+
+<script>
+/* TYPING QUOTE */
+const quoteText = "Pehle password, phir surprise 😄  Don’t worry, hint sirf tumhare liye  💖";
+let qi=0;
+const quoteEl=document.getElementById("quote");
+(function typeQuote(){
+    if(qi<quoteText.length){
+        quoteEl.innerHTML+=quoteText.charAt(qi++);
+        setTimeout(typeQuote,45);
+    }
+})();
+
+/* PASSWORD */
+function unlock(){
+    if(document.getElementById("password").value==="1234"){
+        const card=document.getElementById("lockCard");
+        card.classList.add("crush");
+        setTimeout(()=>{
+            document.getElementById("lockWrap").classList.add("hidden");
+            document.getElementById("questionWrap").classList.remove("hidden");
+            loadQuestion();
+        },700);
+    }else{
+        alert("Oops 😅 password galat hai");
+    }
+}
+
+/* HINGLISH QUESTIONS */
+const questions=[
+ {
+  q:"Aaj thoda different feel ho raha hai, right? 🎂",
+  img:"images/q1.jpg",
+  options:["Haan 💖","Bilkul ✨"],
+  shadow:"shadow1"
+ },
+ {
+  q:"Birthday wishes sach me magic laati hain, agree? 🌸",
+  img:"images/q2.jpg",
+  options:["Agree 💕","100% ✨"],
+  shadow:"shadow2"
+ },
+ {
+  q:"Ek cute message kisi ka din bana sakta hai, right? 😊",
+  img:"images/q3.jpg",
+  options:["Yes 😄","Definitely 💖"],
+  shadow:"shadow3"
+ },
+ {
+  q:"Abhi jo aane wala hai, woh sirf tumhare liye hai 💌 ready?",
+  img:"images/q4.jpg",
+  options:["Ready 🥰","So ready 💕"],
+  shadow:"shadow4"
+ },
+ {
+  q:"Chalo ab tumhari birthday wish open karte hain? 🎁",
+  img:"images/q5.jpg",
+  options:["Yes 💖","Please ✨"],
+  shadow:"shadow5"
+ }
+];
+
+let current=0;
+
+function loadQuestion(){
+    const q=questions[current];
+    const card=document.getElementById("qCard");
+    card.className=`card ${q.shadow}`;
+    document.getElementById("qText").innerText=q.q;
+    document.getElementById("qImg").src=q.img;
+    const optBox=document.getElementById("options");
+    optBox.innerHTML="";
+    q.options.forEach(opt=>{
+        const b=document.createElement("button");
+        b.innerText=opt;
+        b.onclick=next;
+        optBox.appendChild(b);
+    });
+}
+
+function next(){
+    const card=document.getElementById("qCard");
+    card.classList.add("crush");
+    setTimeout(()=>{
+        card.classList.remove("crush");
+        current++;
+        if(current<questions.length){
+            loadQuestion();
+        }else{
+            document.getElementById("questionWrap").classList.add("hidden");
+            document.getElementById("finalWrap").classList.remove("hidden");
+        }
+    },600);
+}
+
+/* LAST ENTER WITH EXIT ANIMATION */
+function goHome(){
+    const fc=document.getElementById("finalCard");
+    fc.classList.add("crush");
+    setTimeout(()=>window.location.href="home.html",700);
+}
+</script>
+
+</body>
+</html>
