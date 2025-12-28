@@ -132,7 +132,7 @@ button{
 
 <script>
 /* TYPING QUOTE */
-const quoteText = "Pehle password, phir surprise 😄  Don’t worry, hint sirf tumhare liye  💖";
+const quoteText = "Aaj ka din thoda special hai… ready ho? 💖";
 let qi=0;
 const quoteEl=document.getElementById("quote");
 (function typeQuote(){
@@ -144,7 +144,7 @@ const quoteEl=document.getElementById("quote");
 
 /* PASSWORD */
 function unlock(){
-    if(document.getElementById("password").value==="0000"){
+    if(document.getElementById("password").value==="mausam"){
         const card=document.getElementById("lockCard");
         card.classList.add("crush");
         setTimeout(()=>{
@@ -224,13 +224,8 @@ function next(){
     },600);
 }
 
-    <div class="page">
-
-     <audio id="bgMusic" src="My_Name_Is_Khan_-_Tere_Naina__Lyrics_Video_(128k).mp3" autoplay loop></audio>
-
-    /* LAST ENTER WITH EXIT ANIMATION */
-
-    function goHome(){
+/* LAST ENTER WITH EXIT ANIMATION */
+function goHome(){
     const fc=document.getElementById("finalCard");
     fc.classList.add("crush");
     setTimeout(()=>window.location.href="home.html",700);
