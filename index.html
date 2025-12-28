@@ -13,8 +13,12 @@
 body{
     margin:0;
     font-family:'Poppins',sans-serif;
-    background:#000;
     overflow:hidden;
+
+    /* 🌌 BACKGROUND IMAGE */
+    background:
+      linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)),
+      url("images/bg.jpg") center/cover no-repeat fixed;
 }
 
 /* CENTER */
@@ -27,13 +31,14 @@ body{
 
 /* CARD */
 .card{
-    background:#111;
+    background:rgba(15,15,15,.92);
     color:#fff;
     width:90%;
     max-width:420px;
     padding:36px;
     border-radius:30px;
     text-align:center;
+    backdrop-filter: blur(8px);
     transform-style:preserve-3d;
     transition:transform .8s ease, opacity .6s ease;
 }
@@ -103,6 +108,9 @@ button{
 
 <body>
 
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" src="music/bg.mp3" loop></audio>
+
 <!-- 🔐 LOCK -->
 <div class="center" id="lockWrap">
     <div class="card shadow1" id="lockCard">
@@ -131,104 +139,69 @@ button{
 </div>
 
 <script>
-/* TYPING QUOTE */
-const quoteText = "Aaj ka din thoda special hai… ready ho? 💖";
+/* ✨ TYPING QUOTE */
+const quoteText="Pehle password, phir surprise 😄  Don’t worry, hint sirf tumhare liye 💖";
 let qi=0;
 const quoteEl=document.getElementById("quote");
 (function typeQuote(){
-    if(qi<quoteText.length){
-        quoteEl.innerHTML+=quoteText.charAt(qi++);
-        setTimeout(typeQuote,45);
-    }
+ if(qi<quoteText.length){
+  quoteEl.innerHTML+=quoteText.charAt(qi++);
+  setTimeout(typeQuote,45);
+ }
 })();
 
-/* PASSWORD */
+/* 🔐 PASSWORD + 🎵 MUSIC */
 function unlock(){
-    if(document.getElementById("password").value==="mausam"){
-        const card=document.getElementById("lockCard");
-        card.classList.add("crush");
-        setTimeout(()=>{
-            document.getElementById("lockWrap").classList.add("hidden");
-            document.getElementById("questionWrap").classList.remove("hidden");
-            loadQuestion();
-        },700);
-    }else{
-        alert("Oops 😅 password galat hai");
-    }
+ if(password.value==="0000"){
+  const music=document.getElementById("bgMusic");
+  music.volume=.6;
+  music.play();
+
+  lockCard.classList.add("crush");
+  setTimeout(()=>{
+   lockWrap.classList.add("hidden");
+   questionWrap.classList.remove("hidden");
+   loadQuestion();
+  },700);
+ }else alert("Oops 😅 password galat hai");
 }
 
-/* HINGLISH QUESTIONS */
+/* QUESTIONS */
 const questions=[
- {
-  q:"Aaj thoda different feel ho raha hai, right? 🎂",
-  img:"images/q1.jpg",
-  options:["Haan 💖","Bilkul ✨"],
-  shadow:"shadow1"
- },
- {
-  q:"Birthday wishes sach me magic laati hain, agree? 🌸",
-  img:"images/q2.jpg",
-  options:["Agree 💕","100% ✨"],
-  shadow:"shadow2"
- },
- {
-  q:"Ek cute message kisi ka din bana sakta hai, right? 😊",
-  img:"images/q3.jpg",
-  options:["Yes 😄","Definitely 💖"],
-  shadow:"shadow3"
- },
- {
-  q:"Abhi jo aane wala hai, woh sirf tumhare liye hai 💌 ready?",
-  img:"images/q4.jpg",
-  options:["Ready 🥰","So ready 💕"],
-  shadow:"shadow4"
- },
- {
-  q:"Chalo ab tumhari birthday wish open karte hain? 🎁",
-  img:"images/q5.jpg",
-  options:["Yes 💖","Please ✨"],
-  shadow:"shadow5"
- }
+ {q:"Aaj thoda different feel ho raha hai, right? 🎂",img:"images/q1.jpg",options:["Haan 💖","Bilkul ✨"],shadow:"shadow1"},
+ {q:"Birthday wishes sach me magic laati hain, agree? 🌸",img:"images/q2.jpg",options:["Agree 💕","100% ✨"],shadow:"shadow2"},
+ {q:"Ek cute message kisi ka din bana sakta hai, right? 😊",img:"images/q3.jpg",options:["Yes 😄","Definitely 💖"],shadow:"shadow3"},
+ {q:"Abhi jo aane wala hai, woh sirf tumhare liye hai 💌 ready?",img:"images/q4.jpg",options:["Ready 🥰","So ready 💕"],shadow:"shadow4"},
+ {q:"Chalo ab tumhari birthday wish open karte hain? 🎁",img:"images/q5.jpg",options:["Yes 💖","Please ✨"],shadow:"shadow5"}
 ];
-
 let current=0;
 
 function loadQuestion(){
-    const q=questions[current];
-    const card=document.getElementById("qCard");
-    card.className=`card ${q.shadow}`;
-    document.getElementById("qText").innerText=q.q;
-    document.getElementById("qImg").src=q.img;
-    const optBox=document.getElementById("options");
-    optBox.innerHTML="";
-    q.options.forEach(opt=>{
-        const b=document.createElement("button");
-        b.innerText=opt;
-        b.onclick=next;
-        optBox.appendChild(b);
-    });
+ const q=questions[current];
+ qCard.className=`card ${q.shadow}`;
+ qText.innerText=q.q;
+ qImg.src=q.img;
+ options.innerHTML="";
+ q.options.forEach(o=>{
+  const b=document.createElement("button");
+  b.innerText=o;
+  b.onclick=next;
+  options.appendChild(b);
+ });
 }
 
 function next(){
-    const card=document.getElementById("qCard");
-    card.classList.add("crush");
-    setTimeout(()=>{
-        card.classList.remove("crush");
-        current++;
-        if(current<questions.length){
-            loadQuestion();
-        }else{
-            document.getElementById("questionWrap").classList.add("hidden");
-            document.getElementById("finalWrap").classList.remove("hidden");
-        }
-    },600);
+ qCard.classList.add("crush");
+ setTimeout(()=>{
+  qCard.classList.remove("crush");
+  current++;
+  current<questions.length?loadQuestion():(questionWrap.classList.add("hidden"),finalWrap.classList.remove("hidden"));
+ },600);
 }
 
-/* LAST ENTER WITH EXIT ANIMATION */
 function goHome(){
-    const fc=document.getElementById("finalCard");
-    fc.classList.add("crush");
-    setTimeout(()=>window.location.href="home.html",700);
+ finalCard.classList.add("crush");
+ setTimeout(()=>location.href="home.html",700);
 }
 </script>
 
